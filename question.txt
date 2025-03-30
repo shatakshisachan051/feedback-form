@@ -1,0 +1,61 @@
+You are required to build a Feedback Board using React and Firebase (Realtime Database). The app allows users to submit feedback, stores it in Firebase, retrieves it in real time, and supports theme toggling with LocalStorage persistence. The layout must be responsive, and the app should be styled using external CSS with Flexbox/Grid, media queries, and pseudo-selectors.
+
+Core Features & Requirements:
+1. React Setup (CDN + Babel)
+Set up a React project using CDN + Babel.
+Components:
+FeedbackForm
+FeedbackList
+FeedbackItem
+ThemeToggle
+2. Feedback Submission (Form + Firebase POST)
+Create a form with:
+Name (text)
+Email (email)
+Comment (textarea)
+Validate:
+All fields must be filled
+Email format should be valid
+On form submission:
+Send data to Firebase Realtime Database using POST request.
+Clear form after successful submission.
+Show confirmation message dynamically using the DOM.
+3. Retrieve & Display Feedback
+On component mount:
+Fetch all feedback entries using a GET request from Firebase.
+Render them inside FeedbackList using the FeedbackItem component.
+Display each feedback in a card (FeedbackItem component). Each feedback card must display:
+Name
+Comment
+Email
+Timestamp (optional if you include it)
+Each card should include:
+Name
+Comment
+Email
+A delete button
+4. Delete Feedback
+Each feedback card should have a delete button.
+On click, remove the feedback from Firebase using DELETE.
+5. Styling
+Use only external CSS file for styling.
+Required techniques:
+CSS Selectors: Universal, Class, ID, Element, and Combinators
+Pseudo-classes (:hover, :focus) and Pseudo-elements (::before, ::after)
+Apply gradients, transitions, custom fonts
+Layout Requirements:
+Use Flexbox to layout the feedback cards
+Use Grid to structure header, form, and list
+6. Theme Toggle (Light/Dark)
+Add a toggle button to switch between Light and Dark modes.
+Store the selected theme in LocalStorage.
+On page load, check localStorage and apply the stored theme using useEffect.
+7. Responsive Design
+Use media queries for:
+Mobile view (stacked layout)
+Tablet/Desktop view (grid or split view)
+Adjust layout, font size, and element positioning responsively.
+Firebase Configuration Instructions :
+Use Firebase Realtime Database (read/write enabled).
+Provide a ready-to-use database URL in the problem prompt.
+Use only Fetch API (no third-party libraries).
