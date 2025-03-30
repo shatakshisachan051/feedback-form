@@ -53,12 +53,12 @@
               onFeedbackSubmit();
             })
             .catch((err) => {
-              console.log(err);
+              console.log("handleSubmit",err);
             });
         }
 
         return (
-          <form onSubmit={handleSubmit} class="feedbackForm">
+          <form onSubmit={handleSubmit} className="feedbackForm">
             <input
               type="text"
               placeholder="enter name"
@@ -91,7 +91,7 @@
             <h3>Name: {props.feedback.name}</h3>
             <p>Comment:{props.feedback.comment}</p>
             <p className="email">{props.feedback.email}</p>
-            <button class="delete" onClick={() => onDelete(props.feedback.id)}>
+            <button className="delete" onClick={() => props.onDelete(props.feedback.id)}>
               Delete
             </button>
           </div>
@@ -139,7 +139,7 @@
                 setFeedbackList(data);
               }
             })
-            .catch((err) => console.log(err));
+            .catch((err) => console.log("1st useEffect App",err));
         }, []);
 
         function handleFeedbackSubmit() {
@@ -150,7 +150,7 @@
                 setFeedbackList(data);
               }
             })
-            .catch((err) => console.log(err));
+            .catch((err) => console.log("2nd useEffect App",err));
         }
 
         function handleFeedbackDelete(id) {
