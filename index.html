@@ -4,160 +4,193 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
 
     <script
       crossorigin
-      src="https://cdn.jsdelivr.net/npm/react@19.1.0/jsx-runtime.min.js"
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
     ></script>
 
     <script
       crossorigin
-      src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.development.js"
-    ></script>
-    <script
-      crossorigin
-      src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.27.0/babel.min.js"
+      src="https://unpkg.com/@babel/standalone/babel.min.js"
     ></script>
   </head>
   <body>
     <div id="root">Hello I am dom</div>
 
     <script type="text/babel">
+      let url =
+        "https://feedback-5ed55-default-rtdb.europe-west1.firebasedatabase.app/feedback.json";
 
-        let url ="https://feedback-5ed55-default-rtdb.europe-west1.firebasedatabase.app/feedback.json";
+      function FeedbackForm({ onFeedbackSubmit }) {
+        let [name, setName] = React.useState("");
+        let [email, setEmail] = React.useState("");
+        let [comment, setComment] = React.useState("");
 
-        function FeedbackForm({onFeedbackSubmit}){
-            let [name,setName] = React.useState('');
-            let [email,setEmail] = React.useState("");
-            let [comment, setComment] = React.useState("");
-            
+        function handleSubmit(e) {
+          e.preventDefault();
 
-            function handleSubmit(e){
+          fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name, email, comment }),
+          })
+            .then((res) => {
+              res.json();
+            })
+            .then(() => {
+              setName("");
+              setEmail("");
+              setComment("");
 
-                e.preventDefault();
-
-                fetch(url,{
-                    method:"POST",
-                    headers:{
-                        'Content-Type':'application/json',
-                    },
-                    body: JSON.stringify({name,email,comment}),
-                }).then(res =>{
-                    res.json()
-                }).then(()=>{
-                    setName("")
-                    setEmail("")
-                    setComment("")
-
-                    onFeedbackSubmit();
-                }).catch((err)=>{
-                    console.log(err)
-                })
-
-
-            }
-
-
-
-            return(
-                <form onSubmit={handleSubmit} class="feedback-form">
-                    <input type="text" placeholder="enter name" value={name} onChange={(e)=>setName(e.target.value)}/>
-                    <input type="email" placeholder="enter email" value={email} onChange={(e)=>setEmail(e.target.value)}/>
-                    <textarea  id="text" placeholder="commet here" value={comment} onChange={(e)=>setComment(e.target.value)}cols="30" rows="10"></textarea>
-
-                    <button type='submit'>Submit form</button>
-                    </form>
-            )
+              onFeedbackSubmit();
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         }
 
-        function FeedbackItem(props){
-            return (
-                <div className="feedback-item">
-                    <h3>{props.feedback.name}</h3>
-                    <p>{props.feedback.comment}</p>
-                    <p className="email">{props.feedback.email}</p>
-                    <button onClick={()=> onDelete(props.feedback.id)}>Delete</button>
-                    
-                    </div>
-            )
-        }
+        return (
+          <form onSubmit={handleSubmit} class="feedbackForm">
+            <input
+              type="text"
+              placeholder="enter name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <input
+              type="email"
+              placeholder="enter email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <textarea
+              id="text"
+              placeholder="commet here"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              cols="30"
+              rows="10"
+            ></textarea>
 
-        function FeedbackList(props){
-            return(
-                <div className="feedback-list">
-                    {Object.entries(props.feedbackList).map(([id,feedback])=>(
-                            <FeedbackItem key ={id} feedback={{...feedback,id}} onDelete={props.onFeedbackDelete}/>
-                        ))}
+            <button type="submit">Submit form</button>
+          </form>
+        );
+      }
 
-                    
-                    </div>
-            )
-        }
+      function FeedbackItem(props) {
+        return (
+          <div className="feedBackItem">
+            <h3>Name: {props.feedback.name}</h3>
+            <p>Comment:{props.feedback.comment}</p>
+            <p className="email">{props.feedback.email}</p>
+            <button class="delete" onClick={() => onDelete(props.feedback.id)}>
+              Delete
+            </button>
+          </div>
+        );
+      }
 
-        function ThemeToggle(props){
-            return(
-                <button className="theme-toggle" onClick={props.onThemeToggle}>
-                
-                    {props.currentTheme==="light"?"Dark Mode": "Light Mode"}
-                        
-                    </button>
-            )
-        }
+      function FeedbackList(props) {
+        return (
+          <div className="listBox">
+            {Object.entries(props.feedbackList).map(([id, feedback]) => (
+              <FeedbackItem
+                key={id}
+                feedback={{ ...feedback, id }}
+                onDelete={props.onFeedbackDelete}
+              />
+            ))}
+          </div>
+        );
+      }
+
+      function ThemeToggle(props) {
+        return (
+          <button className="toggleTheme" onClick={props.onThemeToggle}>
+            {props.currentTheme === "light" ? "Dark Mode" : "Light Mode"}
+          </button>
+        );
+      }
 
       function App() {
-        let [feedbackList, setFeedbackList]=React.useState({});
-        let [theme,setTheme] = React.useState(localStorage.getItem('theme')||'light');
+        let [feedbackList, setFeedbackList] = React.useState({});
+        let [theme, setTheme] = React.useState(
+          localStorage.getItem("theme") || "light"
+        );
 
-        React.useEffect(()=>{
-            document.body.className=theme;
-            localStorage.setItem('theme',theme);
-        },[theme]);
+        React.useEffect(() => {
+          document.body.className = theme;
+          localStorage.setItem("theme", theme);
+        }, [theme]);
 
-        React.useEffect(()=>{
-            fetch(url).then(res=> res.json()).then(data=>{
-                if(data){
-                    setFeedbackList(data);
-                }
-            }).catch(err => console.log(err))
-        })
+        React.useEffect(() => {
+          fetch(url)
+            .then((res) => res.json())
+            .then((data) => {
+              if (data) {
+                setFeedbackList(data);
+              }
+            })
+            .catch((err) => console.log(err));
+        }, []);
 
-        function handleFeedbackSubmit(){
-            fetch(url).then(res => res.json()).then(data=>{
-                if(data){
-                    setFeedbackList(data);
-                }
-            }).catch(err => console.log(err))
+        function handleFeedbackSubmit() {
+          fetch(url)
+            .then((res) => res.json())
+            .then((data) => {
+              if (data) {
+                setFeedbackList(data);
+              }
+            })
+            .catch((err) => console.log(err));
         }
 
-        function handleFeedbackDelete(id){
-            fetch(`https://feedback-5ed55-default-rtdb.europe-west1.firebasedatabase.app/feedback/${id}.json`,{
-                method:"DELETE",
-            }).then(()=>{
-                let newList = {...feedbackList};
-                delete newList[id];
-                setFeedbackList(newList);
-            }).catch(err => console.log("handleFeedbackDelete",err))
+        function handleFeedbackDelete(id) {
+          fetch(
+            `https://feedback-5ed55-default-rtdb.europe-west1.firebasedatabase.app/feedback/${id}.json`,
+            {
+              method: "DELETE",
+            }
+          )
+            .then(() => {
+              let newList = { ...feedbackList };
+              delete newList[id];
+              setFeedbackList(newList);
+            })
+            .catch((err) => console.log("handleFeedbackDelete", err));
         }
 
-        function handleThemeToggle(){
-            setTheme(theme === 'light'?'dark':'light');
+        function handleThemeToggle() {
+          setTheme(theme === "light" ? "dark" : "light");
         }
-        return(
-            <>
+        return (
+          <>
             <div className="app">
-                <header>
-                    <h1>feedback board</h1>
-                    <ThemeToggle onThemeToggle={handleThemeToggle} currentTheme={theme}/>
-                    </header>
-                    <main>
-                        <FeedbackForm onFeedbackSubmit={handleFeedbackSubmit}/>
-                        
-                        
-                        </main>
+              <header>
+                <h1>feedback board</h1>
+                <ThemeToggle
+                  onThemeToggle={handleThemeToggle}
+                  currentTheme={theme}
+                />
+              </header>
+              <main>
+                <FeedbackForm onFeedbackSubmit={handleFeedbackSubmit} />
+                <FeedbackList
+                  feedbackList={feedbackList}
+                  onFeedbackDelete={handleFeedbackDelete}
+                />
+              </main>
             </div>
-            </>
-
-        )
+          </>
+        );
       }
 
       const root = ReactDOM.createRoot(document.getElementById("root"));
