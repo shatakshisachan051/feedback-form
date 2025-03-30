@@ -31,9 +31,14 @@
         let [name, setName] = React.useState("");
         let [email, setEmail] = React.useState("");
         let [comment, setComment] = React.useState("");
+        let [msg, setMsg] = React.useState("");
 
         function handleSubmit(e) {
           e.preventDefault();
+
+          if (!name || !email || !comment) {
+            setMsg("Please fill all input fields");
+          }
 
           fetch(url, {
             method: "POST",
@@ -49,11 +54,13 @@
               setName("");
               setEmail("");
               setComment("");
+              setMsg("Successfully submitted the feedback form!");
 
               onFeedbackSubmit();
             })
             .catch((err) => {
-              console.log("handleSubmit",err);
+              console.log("handleSubmit", err);
+              setMsg("Error ocurred! Try again");
             });
         }
 
@@ -81,6 +88,7 @@
             ></textarea>
 
             <button type="submit">Submit form</button>
+            {msg && <p className="msg">{msg}</p>}
           </form>
         );
       }
@@ -91,7 +99,10 @@
             <h3>Name: {props.feedback.name}</h3>
             <p>Comment:{props.feedback.comment}</p>
             <p className="email">{props.feedback.email}</p>
-            <button className="delete" onClick={() => props.onDelete(props.feedback.id)}>
+            <button
+              className="delete"
+              onClick={() => props.onDelete(props.feedback.id)}
+            >
               Delete
             </button>
           </div>
@@ -139,7 +150,7 @@
                 setFeedbackList(data);
               }
             })
-            .catch((err) => console.log("1st useEffect App",err));
+            .catch((err) => console.log("1st useEffect App", err));
         }, []);
 
         function handleFeedbackSubmit() {
@@ -150,7 +161,7 @@
                 setFeedbackList(data);
               }
             })
-            .catch((err) => console.log("2nd useEffect App",err));
+            .catch((err) => console.log("2nd useEffect App", err));
         }
 
         function handleFeedbackDelete(id) {

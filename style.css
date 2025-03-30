@@ -117,3 +117,8 @@ h3{
 textarea{
     background-image: linear-gradient(rgb(255, 255, 255), gray)
 }
+
+.msg{
+    color: green;
+    margin-top: 12px;
+}
