@@ -26,7 +26,7 @@ input{
     border: none;
 }
 
-.dark .feedBackItem{
+.dark .feedBackItems{
     padding: 20px;
     border-radius: 9px;
     flex: 1 1 300px;
@@ -34,7 +34,7 @@ input{
 
     background-color: #104157;
 }
-.light .feedBackItem{
+.light .feedBackItems{
     padding: 20px;
     border-radius: 9px;
     flex: 1 1 300px;
@@ -43,7 +43,7 @@ input{
     background-color: #ffffff;
 }
 
-.feedBackItem{
+.feedBackItems{
     padding: 10px;
     border-radius: 10px;
 }
@@ -88,7 +88,7 @@ h3{
     margin-bottom: 10px;
 }
 
-.feedBackItem .email{
+.feedBackItems .email{
     
     color: rgb(4, 0, 0);
     /* background-color: rgb(29, 80, 90); */
@@ -107,7 +107,7 @@ h3{
 
 
 @media(max-width: 800px){
-    .feedBackItem{
+    .feedBackItems{
         flex-direction: column;
     }
 }
